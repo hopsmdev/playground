@@ -1,7 +1,5 @@
-from concurrent import futures
-
 import requests
-
+from concurrent import futures
 from utils.execution_time import execution_time
 
 MAX_WORKERS = 32
