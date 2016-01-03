@@ -1,6 +1,8 @@
-import requests
 from concurrent import futures
-from execution_time import execution_time
+
+import requests
+
+from utils.execution_time import execution_time
 
 MAX_WORKERS = 32
 
@@ -14,7 +16,7 @@ def get_thing(thing):
     return requests.get(thing).text
 
 
-@execution_time(loops=10, verbose=False)
+@execution_time(loops=10, verbose=True)
 def download_all_things(things):
     workers = min(MAX_WORKERS, len(things))
     with futures.ThreadPoolExecutor(max_workers=workers) as executor:
@@ -22,7 +24,7 @@ def download_all_things(things):
     return response
 
 
-@execution_time(loops=10, verbose=False)
+@execution_time(loops=10, verbose=True)
 def download_all_things_sequential(things):
     for thing in things:
         get_thing(thing)
