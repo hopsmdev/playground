@@ -25,11 +25,11 @@ class Command(object):
 
     @classmethod
     def open(cls):
-        pass
+        messagebox.showinfo("Open", "Open something")
 
     @classmethod
     def save(cls):
-        pass
+        messagebox.showinfo("Save", "Save something")
 
     @classmethod
     def exit(cls, root):
@@ -67,8 +67,8 @@ def main():
         About=Command.about,
     )
 
-    file_menu = add_commands(file_menu, file_commands)
-    help_menu = add_commands(help_menu, help_commands)
+    add_commands(file_menu, file_commands)
+    add_commands(help_menu, help_commands)
 
     root.mainloop()
 
