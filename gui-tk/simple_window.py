@@ -1,5 +1,10 @@
-import tkinter as tk
-from tkinter import ttk, scrolledtext
+try:
+    import Tkinter as tk
+    from Tkinter import ttk, scrolledtext
+except ImportError:
+    import tkinter as tk
+    from tkinter import ttk, scrolledtext
+
 from functools import partial
 
 

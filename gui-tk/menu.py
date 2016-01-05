@@ -1,5 +1,10 @@
-import tkinter as tk
-from tkinter import Menu, messagebox
+try:
+    import Tkinter as tk
+    from Tkinter import Menu, messagebox
+except ImportError:
+    import tkinter as tk
+    from tkinter import Menu, messagebox
+
 from functools import partial
 from collections import OrderedDict
 
