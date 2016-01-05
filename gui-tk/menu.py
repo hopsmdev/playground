@@ -35,7 +35,7 @@ class Command(object):
     def exit(cls, root):
         answer = messagebox.askyesno("Exit", "Are you sure")
         if answer:
-            root.destroy()
+            root.quit()
 
     @classmethod
     def help(cls):
