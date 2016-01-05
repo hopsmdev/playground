@@ -25,20 +25,56 @@ def add_text_widget(window, width=10, column=0, row=0):
     text = tk.StringVar()
     text_entered = ttk.Entry(window, width=width, textvariable=text)
     text_entered.grid(column=column, row=row)
+    text_entered.focus()
     return text_entered
+
+
+def add_combobox(window, width=10, column=0, row=0, values=None):
+    text = tk.StringVar()
+    text_chosen = ttk.Combobox(
+        window, width=width, textvariable=text, state='readonly')
+    text_chosen.grid(column=column, row=row)
+    text_chosen['values'] = values
+    return text_chosen
+
+
+def add_checkbox(window, text, column=0, row=0):
+    status_var = tk.IntVar()
+    check = tk.Checkbutton(window, text=text, variable=status_var)
+    check.grid(column=column, row=row)
+    return check, status_var
 
 
 def click_button_action(text):
     text.configure(foreground='red')
 
 
+def click_button_action_checkbox(status):
+    print("[checkbox] is selected: ", bool(status.get()))
+
+
 def main():
     window = add_window("Simple Window")
+
     l1 = add_label(window, "Provide text:", column=0, row=0)
-    text_entered = add_text_widget(window, column=0, row=1)
+    text_entered = add_text_widget(window, column=1, row=0)
     action = add_button(
-        window, text="Process", column=1, row=1,
+        window, text="Process", column=2, row=0,
         command=partial(click_button_action, text_entered))
+
+    l2 = add_label(window, "Select:", column=0, row=1)
+    values = (1, 2, 3, 4, 5)
+    text_chosen = add_combobox(window, column=1, row=1, values=values)
+    text_chosen.current(0)
+    action = add_button(
+        window, text="Process", column=2, row=1,
+        command=partial(click_button_action, text_chosen))
+
+    l3 = add_label(window, "Select:", column=0, row=2)
+    check_box, status_var = add_checkbox(window, text="Enable", column=1, row=2)
+    action = add_button(
+        window, text="Process", column=2, row=2,
+        command=partial(click_button_action_checkbox, status_var))
 
     window.mainloop()
 
