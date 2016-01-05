@@ -22,23 +22,23 @@ def add_button(window, text, command, column=0, row=0):
 
 
 def add_text_widget(window, width=10, column=0, row=0):
-    name = tk.StringVar()
-    name_entered = ttk.Entry(window, width=width, textvariable=name)
-    name_entered.grid(column=column, row=row)
-    return name_entered
+    text = tk.StringVar()
+    text_entered = ttk.Entry(window, width=width, textvariable=text)
+    text_entered.grid(column=column, row=row)
+    return text_entered
 
 
-def click_button_action(label):
-    label.configure(foreground='red')
+def click_button_action(text):
+    text.configure(foreground='red')
 
 
 def main():
     window = add_window("Simple Window")
-    l1 = add_label(window, "Provide URL", column=0, row=0)
+    l1 = add_label(window, "Provide text:", column=0, row=0)
+    text_entered = add_text_widget(window, column=0, row=1)
     action = add_button(
-        window, text="Download", column=1, row=1,
-        command=partial(click_button_action, l1))
-    add_text_widget(window, column=0, row=1)
+        window, text="Process", column=1, row=1,
+        command=partial(click_button_action, text_entered))
 
     window.mainloop()
 
