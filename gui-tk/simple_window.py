@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, scrolledtext
 from functools import partial
 
 
@@ -45,12 +45,27 @@ def add_checkbox(window, text, column=0, row=0):
     return check, status_var
 
 
+def add_scrolledtext(
+        window, width=20, height=5, wrap=tk.WORD,
+        column=0, row=0, columnspan=3):
+    scroll_text = scrolledtext.ScrolledText(
+        window, width=width, height=height, wrap=wrap)
+    scroll_text.grid(column=column, row=row, columnspan=3)
+    return scroll_text
+
+
 def click_button_action(text):
+    print(text.get())
     text.configure(foreground='red')
 
 
 def click_button_action_checkbox(status):
     print("[checkbox] is selected: ", bool(status.get()))
+
+
+def click_button_action_scrolledtext(text):
+    print(text.get('1.0', tk.END))
+    text.configure(foreground='red')
 
 
 def main():
@@ -75,6 +90,11 @@ def main():
     action = add_button(
         window, text="Process", column=2, row=2,
         command=partial(click_button_action_checkbox, status_var))
+
+    text = add_scrolledtext(window, column=0, row=3)
+    action = add_button(
+        window, text="Process", column=4, row=3,
+        command=partial(click_button_action_scrolledtext, text))
 
     window.mainloop()
 
