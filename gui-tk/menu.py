@@ -59,7 +59,7 @@ def main():
         ('New', Command.new),
         ('Open', Command.open),
         ('Save', Command.save),
-        ('Exit',partial(Command.exit, root)),
+        ('Exit', partial(Command.exit, root)),
     ])
 
     help_commands = OrderedDict([
