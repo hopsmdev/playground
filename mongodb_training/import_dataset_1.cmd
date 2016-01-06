@@ -1,21 +1,27 @@
 :: Script to import DATASET to mongodb
 
+:: Just before running this script you need to go to script directory
+:: and run import_dataset_1.cmd
+
+@echo off
 :: set mongodb connection details
 ::mongo ds035995.mongolab.com:35995/testdb_mongolab -u <dbuser> -p <dbpassword>
-SET MONGODB_PATH=E:\apps\mongodb\bin
-SET MONGODB_HOST=ds035995.mongolab.com
-SET MONGODB_PORT=3595
-SET MONGODB_USER=testdb
+set MONGODB_PATH=E:\apps\mongodb\bin
+set MONGODB_HOST=ds035995.mongolab.com:35995
+set MONGODB_USER=testdb
 
-IF DEFINED MONGODB_PASSWORD (ECHO MONGODB_PASSWORD IS defined) ELSE (ECHO MONGODB_PASSWORD is NOT defined)
+if not defined MONGODB_PASSWORD (
+    echo MONGODB_PASSWORD is not defined
+    exit /b
+)
 
 ::set parameters for mongoimport command
-SET DATABASE=test
-SET DATASET=primer-dataset.json
-SET COLLECTION=restaurants
+set DATABASE=testdb_mongolab
+set DATASET=datasets\primer-dataset.json
+set COLLECTION=restaurants
 
 ::set mongodb path
-SET PATH=%PATH%;%MONGODB_PATH%
+set PATH=%PATH%;%MONGODB_PATH%
 
-mongoimport --db %DATABASE% --collection %COLLECTION% --drop --file %$DATASET%^
- --host %MONGODB_HOST% --port %MONGODB_PORT% --username %MONGODB_USER% --password %MONGODB_PASSWORD%
+mongoimport --host %MONGODB_HOST% --db %DATABASE% --collection %COLLECTION% --drop --file %DATASET% ^
+--username %MONGODB_USER% --password %MONGODB_PASSWORD%
