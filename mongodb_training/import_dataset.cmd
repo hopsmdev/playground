@@ -1,8 +1,5 @@
 :: Script to import DATASET to mongodb
 
-:: Just before running this script you need to go to script directory
-:: and run import_dataset_1.cmd
-
 @echo off
 :: set mongodb connection details
 ::mongo ds035995.mongolab.com:35995/testdb_mongolab -u <dbuser> -p <dbpassword>
