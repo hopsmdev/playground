@@ -53,3 +53,10 @@ if __name__ == "__main__":
     download_all_things_map(things_to_download)
     download_all_things_submit(things_to_download)
     download_all_things_sequential(things_to_download)
+
+    ""
+    [download_all_things_map] exec time: 1.1174753980000787 s, loops: 10
+    [download_all_things_submit] exec time: 0.7971122307001679 s, loops: 10
+    [download_all_things_sequential] exec time: 1.1475031709001087 s,loops: 10
+
+    ""
