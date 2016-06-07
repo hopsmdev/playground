@@ -24,11 +24,12 @@ checkio('QwErTy911poqqqq') == True
 import string
 def checkio(data):
 
+    data = set(data)
     return all(
         (len(data) >= 10,
-         set(data) & set(string.digits),
-         set(data) & set(string.ascii_lowercase),
-         set(data) & set(string.ascii_uppercase)))
+         data & set(string.digits),
+         data & set(string.ascii_lowercase),
+         data & set(string.ascii_uppercase)))
 
 #Some hints
 #Just check all conditions
