@@ -46,7 +46,6 @@ count_neighbours(((1, 0, 0, 1, 0),
 
 """
 
-
 def count_neighbours(grid, row, col):
 
     """
@@ -68,8 +67,6 @@ def count_neighbours(grid, row, col):
                     neighbours += 1
 
     return neighbours
-
-
 
 
 if __name__ == '__main__':
