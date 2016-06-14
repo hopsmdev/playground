@@ -33,116 +33,22 @@ checkio(44) == 'XLIV'
 checkio(3999) == 'MMMCMXCIX'
 """
 
-
-def reduce_X(number, data):
-    reminder = number // 10
-    if reminder > 0:  # X
-        if number >= 10:
-            data.append("X" * int(str(number)[0]))
-        number -= reminder * 10
-    print("reduce_10", number, data)
-    return number
+roman_map = [('M', 1000), ('CM', 900), ('D', 500), ('CD', 400), ('C', 100),
+             ('XC', 90), ('L', 50), ('XL', 40), ('X', 10), ('IX', 9),
+             ('V', 5), ('IV', 4), ('I', 1)]
 
 
-def reduce_V(number, data):
-    reminder = number // 5
-    if reminder > 0:  # V
-        if number == 5:
-            data.append("V")
-        elif number == 9:
-            data.append("IX")
-        else:
-            number -= 5
-            data.append("V" + "I" * number)
-    else:
-        if number == 4:
-            data.append("IV")
-        else:
-            data.append("I" * number)
-    print("reduce_5", number, data)
-    return number
+def checkio(data):
+    roman_numbers = []
+    for roman_letter, number in roman_map:
+        while number <= data:
+            roman_numbers.append(roman_letter)
+            data -= number
+            if data == 0:
+                return "".join(roman_numbers)
 
-
-def reduce_L(number, data):
-    reminder = number // 50
-    if reminder > 0:  # L
-        if 90 <= number < 100:
-            data.append("XC")
-            number = int(str(number)[1:])
-        elif 90 > number >= 50:
-            data.append("L")
-            number -= 50
-        else:
-            number = int(str(number)[1:])
-    else:
-        if number >= 40 < 50:
-            data.append("XL")
-            number = int(str(number)[1:])
-
-    print("reduce_50", number, data)
-    return number
-
-
-def reduce_C(number, data):
-    reminder = number // 100
-    if reminder > 0:  # C
-        if 400 > number >= 100:
-            data.append("C" * int(str(number)[0]))
-            number = int(str(number)[1:])
-    print("reduce_100", number, data)
-    return number
-
-
-def reduce_D(number, data):
-    reminder = number // 500
-    if reminder > 0:  # D
-        if 900 > number >= 500:
-            data.append("D")
-            number -= 500
-    else:
-        if 500 > number >= 400:
-            data.append("CD")
-            number = int(str(number)[1:])
-    print("reduce_500", number, data)
-    return number
-
-
-def reduce_M(number, data):
-    reminder = number // 1000
-    if reminder > 0:  # M
-        number -= reminder * 1000
-        data.append("M" * reminder)
-    else:
-        if number >= 900:
-            data.append("CM")
-            number -= 900
-    print("reduce_1000", number, data)
-    return number
-
-
-def reduce(function, number, data, min, max):
-    number = function(number, data)
-    if max > number >= min:
-            return function(number, data)
-    return number
-
-
-def checkio(number):
-
-    data = []
-
-    number = reduce(reduce_M, number, data, 900, 1000)
-    number = reduce(reduce_D, number, data, 500, 900)
-    number = reduce(reduce_C, number, data, 100, 500)
-    number = reduce(reduce_L, number, data, 50, 100)
-    number = reduce(reduce_X, number, data, 10, 50)
-    number = reduce_V(number, data)
-
-    print(number, "".join(data))
-    return "".join(data)
 
 if __name__ == '__main__':
-
 
     assert checkio(1) == 'I', '1'
     assert checkio(2) == 'II', '2'
