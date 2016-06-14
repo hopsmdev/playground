@@ -34,7 +34,7 @@ checkio(3999) == 'MMMCMXCIX'
 """
 
 
-def reduce_10(number, data):
+def reduce_X(number, data):
     reminder = number // 10
     if reminder > 0:  # X
         if number >= 10:
@@ -44,7 +44,7 @@ def reduce_10(number, data):
     return number
 
 
-def reduce_5(number, data):
+def reduce_V(number, data):
     reminder = number // 5
     if reminder > 0:  # V
         if number == 5:
@@ -63,7 +63,7 @@ def reduce_5(number, data):
     return number
 
 
-def reduce_50(number, data):
+def reduce_L(number, data):
     reminder = number // 50
     if reminder > 0:  # L
         if 90 <= number < 100:
@@ -83,7 +83,7 @@ def reduce_50(number, data):
     return number
 
 
-def reduce_100(number, data):
+def reduce_C(number, data):
     reminder = number // 100
     if reminder > 0:  # C
         if 400 > number >= 100:
@@ -93,7 +93,7 @@ def reduce_100(number, data):
     return number
 
 
-def reduce_500(number, data):
+def reduce_D(number, data):
     reminder = number // 500
     if reminder > 0:  # D
         if 900 > number >= 500:
@@ -107,7 +107,7 @@ def reduce_500(number, data):
     return number
 
 
-def reduce_1000(number, data):
+def reduce_M(number, data):
     reminder = number // 1000
     if reminder > 0:  # M
         number -= reminder * 1000
@@ -131,12 +131,12 @@ def checkio(number):
 
     data = []
 
-    number = reduce(reduce_1000, number, data, 900, 1000)
-    number = reduce(reduce_500, number, data, 500, 900)
-    number = reduce(reduce_100, number, data, 100, 500)
-    number = reduce(reduce_50, number, data, 50, 100)
-    number = reduce(reduce_10, number, data, 10, 50)
-    number = reduce_5(number, data)
+    number = reduce(reduce_M, number, data, 900, 1000)
+    number = reduce(reduce_D, number, data, 500, 900)
+    number = reduce(reduce_C, number, data, 100, 500)
+    number = reduce(reduce_L, number, data, 50, 100)
+    number = reduce(reduce_X, number, data, 10, 50)
+    number = reduce_V(number, data)
 
     print(number, "".join(data))
     return "".join(data)
@@ -183,4 +183,3 @@ if __name__ == '__main__':
     assert checkio(3888) == 'MMMDCCCLXXXVIII', '3888'
     assert checkio(3999) == 'MMMCMXCIX', '3999'
     assert checkio(44) == 'XLIV', '44'
-
