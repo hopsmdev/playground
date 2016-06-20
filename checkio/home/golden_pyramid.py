@@ -2,10 +2,9 @@ _ROOT, _DEPTH, _BREADTH = range(3)
 
 
 class Node:
-    def __init__(self, identifier, value):
+    def __init__(self, identifier):
         self.__identifier = identifier
         self.__children = []
-        self.__value = value
 
     @property
     def identifier(self):
@@ -15,15 +14,8 @@ class Node:
     def children(self):
         return self.__children
 
-    @property
-    def value(self):
-        return self.__value
-
     def add_child(self, identifier):
         self.__children.append(identifier)
-
-    def is_leaf(self):
-        return bool(self.children)
 
     def __str__(self):
         return str(self.identifier)
@@ -33,18 +25,15 @@ class Node:
 
 
 class Tree:
-
-    def __init__(self, pyramid):
+    def __init__(self):
         self.__nodes = {}
-        self.pyramid = pyramid
 
     @property
     def nodes(self):
         return self.__nodes
 
     def add_node(self, identifier, parent=None):
-        node = Node(identifier,
-                    self.pyramid[identifier[0]][identifier[1]])
+        node = Node(identifier)
         self[identifier] = node
 
         if parent is not None:
@@ -71,6 +60,26 @@ class Tree:
 
 
 def find_all_paths(graph, start, end, path=[]):
+    """
+    Algorithm implementation idea taken from
+    https://www.python.org/doc/essays/graphs/
+
+    It finds all paths between start and end node in graph
+    :param graph: tree like:
+        (0, 0)
+	        (1, 0)
+		        (2, 0)
+			        (3, 0)
+			        (3, 1)
+		        (2, 1)
+			        (3, 1)
+			        (3, 2)
+
+    :param start: root node e.g.; (0, 0)
+    :param end: end node e.g.: (3, 2)
+    :param path:
+    :return: list of all paths between start and end node in graph
+    """
     path = path + [start]
     if start == end:
         return [path]
@@ -85,7 +94,7 @@ def find_all_paths(graph, start, end, path=[]):
     return paths
 
 
-def test(pyramid):
+def test_count_gold(pyramid):
     """
     ((1,),
     (2, 3),
@@ -93,7 +102,7 @@ def test(pyramid):
     (3, 1, 5, 4),
     """
 
-    tree = Tree(pyramid)
+    tree = Tree()
     tree.add_node((0,0))  # root node
     tree.add_node((1,0), (0,0))
     tree.add_node((1,1), (0,0))
@@ -116,14 +125,12 @@ def test(pyramid):
         paths = find_all_paths(tree, (0,0), endpoint)
         values = []
         for path in paths:
-            values.append([tree[node].value for node in path])
+            values.append([pyramid[node[0]][node[1]] for node in path])
 
         max_gold_path = [sum(path) for path in values]
         max_gold.append(max(max_gold_path))
-        print(paths)
-        print(values)
-        print(max_gold_path)
-        print("MAX GOLD", max(max_gold))
+
+    print("MAX GOLD: ", max(max_gold))
 
 
 def count_gold(pyramid):
@@ -132,7 +139,7 @@ def count_gold(pyramid):
     root = (root_row_idx, root_col_idx)
 
     # create Tree with root (0, 0)
-    tree = Tree(pyramid)
+    tree = Tree()
     tree.add_node(root)  # root node
 
     # list of roots: [((0,0)), ((1,0), (1,1), (1, 2)) ,,,((n, n+1),(n, n+2))]
@@ -163,36 +170,31 @@ def count_gold(pyramid):
     for endpoint in endpoints:  # iterate over endpoints
         # find all possible paths in tree (from root to given endpoint)
         paths = find_all_paths(tree, (0,0), endpoint)
-        print(endpoint, paths)
 
         # translate node coordinates to node value (values list)
         # for example from (0, 0) to 1
         values = []
         for path in paths:
-            values.append([tree[node].value for node in path])
-
-        print(values)
+            values.append([pyramid[node[0]][node[1]] for node in path])
 
         # sum all values for given path
         max_gold_path = [sum(path) for path in values]
-        print(max_gold_path)
 
         # add maximum value for path to max_gold list
         max_gold.append(max(max_gold_path))
 
-    print("MAX GOLD", max(max_gold))
+    print("MAX GOLD: ", max(max_gold))
     return max(max_gold)
 
 
 if __name__ == '__main__':
-    """
-    test((
+
+    test_count_gold((
         (1,),
         (2, 3),
         (3, 3, 1),
         (3, 1, 5, 4)))
-    """
-    #These "asserts" using only for self-checking and not necessary for auto-testing
+
     assert count_gold((
         (1,),
         (2, 3),
@@ -219,9 +221,9 @@ if __name__ == '__main__':
     )) == 18, "Third example"
 
     assert count_gold((
-                [2],
-                [7, 9],
-                [0, 8, 6],
-                [4, 7, 6, 8],
-                [0, 5, 5, 4, 1],
-                [9, 1, 0, 1, 6, 9])) == 35, "last example"
+        [2],
+        [7, 9],
+        [0, 8, 6],
+        [4, 7, 6, 8],
+        [0, 5, 5, 4, 1],
+        [9, 1, 0, 1, 6, 9])) == 35, "last example"
