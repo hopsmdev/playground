@@ -79,8 +79,8 @@ def find_all_paths(graph, start, end, path=[]):
     paths = []
     for node in graph[start].children:
         if node not in path:
-            newpaths = find_all_paths(graph, node, end, path)
-            for newpath in newpaths:
+            new_paths = find_all_paths(graph, node, end, path)
+            for newpath in new_paths:
                 paths.append(newpath)
     return paths
 
@@ -91,9 +91,8 @@ def test(pyramid):
     (2, 3),
     (3, 3, 1),
     (3, 1, 5, 4),
-    (3, 1, 3, 1, 3),
-    :return:
     """
+
     tree = Tree(pyramid)
     tree.add_node((0,0))  # root node
     tree.add_node((1,0), (0,0))
@@ -128,22 +127,69 @@ def test(pyramid):
 
 
 def count_gold(pyramid):
-    #test(pyramid)
 
     root_row_idx, root_col_idx = 0, 0
     root = (root_row_idx, root_col_idx)
+
+    # create Tree with root (0, 0)
     tree = Tree(pyramid)
-    tree.add_node((0, 0))  # root node
+    tree.add_node(root)  # root node
 
-    for row_idx, row in enumerate(pyramid[1:]):
-        for col_idx, col in enumerate(row):
-            if col_idx == root_col_idx:
-                tree.add_node((row_idx, col_idx), root)
-        root = (row_idx, col_idx)
+    # list of roots: [((0,0)), ((1,0), (1,1), (1, 2)) ,,,((n, n+1),(n, n+2))]
+    root_col_idxs = [(row_idx, range(len(row)))
+                     for row_idx, row in enumerate(pyramid[:-1])]
 
+    for row_idx, col_idxs in root_col_idxs:  # iterate over list of roots
+        for col_idx in col_idxs:
+            root = (row_idx, col_idx)
+
+            # find children nodes
+            next_row = min(row_idx + 1, len(pyramid) - 1)
+            next_col = min(col_idx + 1, next_row)
+            prev_col = max(col_idx - 1, 0)
+
+            # create new node in tree
+            [tree.add_node(node, root) for node in
+             set([(next_row, col_idx),
+                  (next_row, next_col),
+                  (next_row, prev_col)])]
+
+    # uncomment this to display tree
+    #tree.display((0,0))
+
+    # find tree endpoints (tree leaves)
+    endpoints = [(len(pyramid[-1]) - 1, col)
+                 for col in range(len(pyramid[-1]))]
+
+    max_gold = []
+    for endpoint in endpoints:  # iterate over endpoints
+        # find all possible paths in tree (from root to given endpoint)
+        paths = find_all_paths(tree, (0,0), endpoint)
+
+        # translate node coordinates to node value (values list)
+        # for example from (0, 0) to 1
+        values = []
+        for path in paths:
+            values.append([tree[node].value for node in path])
+
+        # sum all values for given path
+        max_gold_path = [sum(path) for path in values]
+
+        # add maximum value for path to max_gold list
+        max_gold.append(max(max_gold_path))
+
+    print("MAX GOLD", max(max_gold))
+    return max(max_gold)
 
 
 if __name__ == '__main__':
+    """
+    test((
+        (1,),
+        (2, 3),
+        (3, 3, 1),
+        (3, 1, 5, 4)))
+    """
     #These "asserts" using only for self-checking and not necessary for auto-testing
     assert count_gold((
         (1,),
