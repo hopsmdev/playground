@@ -146,15 +146,13 @@ def count_gold(pyramid):
             # find children nodes
             next_row = min(row_idx + 1, len(pyramid) - 1)
             next_col = min(col_idx + 1, next_row)
-            prev_col = max(col_idx - 1, 0)
 
             # create new node in tree
             [tree.add_node(node, root) for node in
              set([(next_row, col_idx),
-                  (next_row, next_col),
-                  (next_row, prev_col)])]
+                  (next_row, next_col)])]
 
-    # uncomment this to display tree
+    # uncomment this to print tree
     #tree.display((0,0))
 
     # find tree endpoints (tree leaves)
@@ -165,6 +163,7 @@ def count_gold(pyramid):
     for endpoint in endpoints:  # iterate over endpoints
         # find all possible paths in tree (from root to given endpoint)
         paths = find_all_paths(tree, (0,0), endpoint)
+        print(endpoint, paths)
 
         # translate node coordinates to node value (values list)
         # for example from (0, 0) to 1
@@ -172,8 +171,11 @@ def count_gold(pyramid):
         for path in paths:
             values.append([tree[node].value for node in path])
 
+        print(values)
+
         # sum all values for given path
         max_gold_path = [sum(path) for path in values]
+        print(max_gold_path)
 
         # add maximum value for path to max_gold list
         max_gold.append(max(max_gold_path))
@@ -215,3 +217,11 @@ if __name__ == '__main__':
         (3, 3, 3),
         (4, 4, 4, 4)
     )) == 18, "Third example"
+
+    assert count_gold((
+                [2],
+                [7, 9],
+                [0, 8, 6],
+                [4, 7, 6, 8],
+                [0, 5, 5, 4, 1],
+                [9, 1, 0, 1, 6, 9])) == 35, "last example"
