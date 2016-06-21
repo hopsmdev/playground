@@ -1,3 +1,42 @@
+"""
+DISCLAIMER:
+This algorithm (finding all paths in graph) is very inefficient for
+big problems set.
+You can think of it like about Brute Force algorithm with very bad
+time complexity O(2^n).
+
+This is a classical problem which shows you how to use dynamic programming.
+This concept is a core component of many optimisation tasks
+"""
+
+"""
+Consider a tuple of tuples in which the first tuple has one integer and each
+consecutive tuple has one more integer then the last. Such a tuple of tuples
+would look like a triangle. You should write a program that will help Stephan
+find the highest possible sum on the most profitable route down the pyramid.
+All routes down the pyramid involve stepping down and to the left or down and
+to the right.
+
+Tips: Think of each step down to the left as moving to the same index location
+or to the right as one index location higher. Be very careful if you plan to
+use recursion here.
+
+For example we have pyramids like:
+
+(1,),
+(2, 3),
+(3, 3, 1),
+(3, 1, 5, 4),
+(3, 1, 3, 1, 3),
+(2, 2, 2, 2, 2, 2),
+(5, 6, 4, 5, 6, 4, 3)
+
+Maximum gold count here is 23, and path is:
+(0,0) 1 -> (1,1) 3 -> (2,1) 3 -> (3,2) 5 -> (4,2) 3 -> (5,3) 2 -> (6,4) 6
+and it takes 23
+"""
+
+
 _ROOT, _DEPTH, _BREADTH = range(3)
 
 
@@ -169,7 +208,7 @@ def count_gold(pyramid):
     max_gold = []
     for endpoint in endpoints:  # iterate over endpoints
         # find all possible paths in tree (from root to given endpoint)
-        paths = find_all_paths(tree, (0,0), endpoint)
+        paths = find_all_paths(tree, (0, 0), endpoint)
 
         # translate node coordinates to node value (values list)
         # for example from (0, 0) to 1
@@ -227,3 +266,33 @@ if __name__ == '__main__':
         [4, 7, 6, 8],
         [0, 5, 5, 4, 1],
         [9, 1, 0, 1, 6, 9])) == 35, "last example"
+
+
+    """
+    This algorithm is very inefficient for big problems set like this
+    last pyramid - so processing may take a while ...
+    """
+    """
+    assert count_gold((
+        [4],
+        [1, 7],
+        [9, 9, 7],
+        [4, 9, 9, 3],
+        [3, 5, 3, 7, 5],
+        [1, 7, 5, 3, 5, 6],
+        [6, 5, 5, 8, 3, 3, 3],
+        [6, 8, 6, 8, 7, 3, 7, 5],
+        [7, 9, 9, 1, 6, 8, 7, 5, 9],
+        [2, 8, 2, 5, 5, 5, 2, 5, 7, 8],
+        [1, 3, 5, 2, 4, 5, 3, 5, 1, 1, 6],
+        [8, 6, 1, 1, 3, 4, 7, 5, 3, 6, 1, 9],
+        [5, 8, 6, 6, 2, 6, 9, 3, 7, 4, 6, 9, 9],
+        [3, 3, 5, 4, 4, 6, 9, 2, 5, 7, 7, 1, 6, 7],
+        [8, 1, 4, 4, 6, 8, 4, 9, 7, 6, 1, 8, 4, 2, 9],
+        [6, 5, 8, 6, 8, 3, 2, 4, 8, 8, 1, 5, 6, 8, 8, 7],
+        [6, 3, 9, 1, 5, 6, 7, 7, 2, 2, 6, 2, 2, 1, 8, 8, 6],
+        [4, 7, 8, 7, 5, 2, 8, 8, 2, 2, 7, 1, 3, 8, 1, 9, 4, 7],
+        [1, 7, 8, 1, 4, 3, 8, 6, 6, 9, 6, 3, 5, 4, 7, 6, 4, 5, 6],
+        [1, 1, 4, 9, 9, 8, 3, 3, 8, 1, 8, 1, 7, 6, 6, 3, 2, 1, 1, 6],
+    )) == 139
+    """
