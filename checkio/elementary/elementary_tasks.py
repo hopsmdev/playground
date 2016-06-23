@@ -431,6 +431,7 @@ def friends():
     print(f.connected('nikola'))
     assert f.connected("nikola") == {"sophia"}
 
+
 if __name__ == "__main__":
     fizz_buzz()
     index_power()
