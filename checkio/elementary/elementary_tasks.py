@@ -268,6 +268,169 @@ def count_inversions():
     assert count_inversion((99, -99)) == 1, "Two numbers"
     assert count_inversion((5, 3, 2, 1, 0)) == 10, "Reversed"
 
+
+def panagram():
+    """
+    https://checkio.org/mission/pangram/
+    A pangram (Greek:παν γράμμα, pan gramma, "every letter") or holoalphabetic
+    sentence for a given alphabet is a sentence using every letter of the
+    alphabet at least once. Perhaps you are familiar with the well
+    known pangram "The quick brown fox jumps over the lazy dog".
+    For this mission, we will use the latin alphabet (A-Z). You are given a
+    text with latin letters and punctuation symbols. You need to check if
+    the sentence is a pangram or not. Case does not matter.
+    """
+    import string
+
+    def check_pangram(text):
+        return string.ascii_lowercase in "".join(
+            sorted(set([char for char in text.lower()
+                        if char in string.ascii_letters])))
+
+    assert check_pangram(
+        "The quick brown fox jumps over the lazy dog."), "brown fox"
+    assert not check_pangram("ABCDEF"), "ABC"
+    assert check_pangram(
+        "Bored? Craving a pub quiz fix? Why, just come to the Royal Oak!"), "Bored?"
+
+
+def binary_count():
+    """
+    https://checkio.org/mission/binary-count/
+    For the Robots the decimal format is inconvenient. If they need to count
+    to "1", their computer brains want to count it in the binary representation
+    of that number. You can read more about binary here.
+    You are given a number (a positive integer). You should convert it to the
+    binary format and count how many unities (1) are in the number spelling.
+    For example: 5 = 0b101 contains two unities, so the answer is 2.
+    Input: A number as a positive integer.
+    Output: The quantity of unities in the binary form as an integer.
+    """
+
+    def checkio(number):
+        return bin(number)[2:].count('1')
+
+    assert checkio(4) == 1
+    assert checkio(15) == 4
+    assert checkio(1) == 1
+    assert checkio(1022) == 9
+
+
+def common_words():
+    """
+    https://checkio.org/mission/common-words/
+    You are given two strings with words separated by commas. Try to find what
+    is common between these strings. The words are not repeated in the
+    same string. Your function should find all of the words that appear in
+    both strings. The result must be represented as a string of words separated
+    by commas in alphabetic order.
+    """
+
+    def checkio(first, second):
+        return ','.join(sorted(set(first.split(',')) & set(second.split(','))))
+
+    assert checkio("hello,world", "hello,earth") == "hello", "Hello"
+    assert checkio("one,two,three", "four,five,six") == "", "Too different"
+    assert checkio("one,two,three", "four,five,one,two,six,three") \
+           == "one,three,two", "1 2 3"
+
+
+def friends():
+    """
+    https://checkio.org/mission/friends/
+    For the mission "How to find friends" , it’s nice to have access to a
+    specially made data structure. In this mission we will realize a data
+    structure which we will use to store and work with a friend network.
+    The class "Friends" should contains names and the connections between them.
+    Names are represented as strings and are case sensitive.
+    Connections are undirected, so if "sophia" is connected with "nikola",
+    then it's also correct in reverse.
+    """
+
+    from itertools import chain
+
+    class Friends:
+        def __init__(self, connections):
+            """
+            Returns a new Friends instance. "connections" is an iterable of
+            sets with two elements in each. Each connection contains two
+            names as strings. Connections can be repeated in the initial data,
+            but inside it's stored once.
+            Each connection has only two states - existing or not.
+            :param connections:
+            :return:
+            """
+            self.connections = list(connections)
+
+        def add(self, connection):
+            """
+            Add a connection in the instance. "connection" is a set of
+            two names (strings). Returns True if this connection is new.
+            Returns False if this connection exists already.
+            :param connection:
+            :return:
+            """
+
+            if connection not in self.connections:
+                self.connections.append(connection)
+                return True
+            return False
+
+        def remove(self, connection):
+            """
+            Remove a connection from the instance. "connection" is a set of
+            two names (strings). Returns True if this connection exists.
+            Returns False if this connection is not in the instance.
+            :param connection:
+            :return:
+            """
+
+            if connection in self.connections:
+                self.connections.remove(connection)
+                return True
+            return False
+
+        def names(self):
+            """
+            Returns a set of names. The set contains only names which are
+            connected with somebody.
+            :return:
+            """
+            return set(conn for conn in chain.from_iterable(self.connections))
+
+        def connected(self, name):
+            """
+            Returns a set of names which is connected with the given "name".
+            If "name" does not exist in the instance, then return an empty set.
+            f = Friends(({"a", "b"}, {"b", "c"}, {"c", "a"}))
+            f.connected("a")  # {"b", "c"}
+            :param name:
+            :return:
+            """
+
+            _connections = {n for conn in self.connections
+                            for n in conn if name in conn}
+            if name in self.names():
+                _connections.remove(name)
+                return _connections
+            return set()
+
+
+    letter_friends = Friends(({"a", "b"}, {"b", "c"}, {"c", "a"}, {"a", "c"}))
+    digit_friends = Friends([{"1", "2"}, {"3", "1"}])
+    assert letter_friends.add({"c", "d"}) is True, "Add"
+    assert letter_friends.add({"c", "d"}) is False, "Add again"
+    assert letter_friends.remove({"c", "d"}) is True, "Remove"
+    assert digit_friends.remove({"c", "d"}) is False, "Remove non exists"
+    assert letter_friends.names() == {"a", "b", "c"}, "Names"
+    assert letter_friends.connected("d") == set(), "Non connected name"
+    assert letter_friends.connected("a") == {"b", "c"}, "Connected name"
+
+    f = Friends(({"nikola", "sophia"},
+                 {"stephen", "robot"}, {"sophia", "pilot"}))
+    print(f.connected('nikola'))
+    assert f.connected("nikola") == {"sophia"}
+
 if __name__ == "__main__":
     fizz_buzz()
     index_power()
@@ -281,3 +444,7 @@ if __name__ == "__main__":
     end_of_other()
     days_diff()
     count_inversions()
+    panagram()
+    binary_count()
+    common_words()
+    friends()
